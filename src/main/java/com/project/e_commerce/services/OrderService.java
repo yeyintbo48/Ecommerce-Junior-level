@@ -21,6 +21,10 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductsRepository productsRepository;
 
+    public List<Order> getOrdersByUser(Long userId){
+        return orderRepository.findByUserId(userId);
+    }
+
     @Transactional
     public Order placeOrder(Long userId,List<OrderItemRequest> itemRequests){
         User user = userRepository.findById(userId).orElseThrow(()->new RuntimeException("User not found with useId" + userId));
