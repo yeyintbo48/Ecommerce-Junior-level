@@ -31,18 +31,23 @@ public class OrderService {
 
         Order order= new Order();
         order.setUser(user);
-
         List<OrderItem> orderItems = new ArrayList<>();
 
         for(OrderItemRequest request: itemRequests){
-            Products product = productsRepository.findById(request.getProductId()).orElseThrow(()->new RuntimeException("Product not found with id:" + request.getProductId()));
+            Products product = productsRepository.findById(request.getProductId())
+            .orElseThrow(()->new RuntimeException("Product not found with id:" + request.getProductId()));
+
+            if(product.getStock() < request.getQuantity()){
+                throw new RuntimeException("Not enough stock-" + product.getName() + "(Stock-" + product.getStock() + ")" );
+            }
+            product.setStock(product.getStock() - request.getQuantity());
+            productsRepository.save(product);
+            
             OrderItem item = new OrderItem();
             item.setProducts(product);
             item.setQuantity(request.getQuantity());
-
             item.setPrice(product.getPrice());
             item.setOrder(order);
-
             orderItems.add(item);
         }
         order.setOrderItems(orderItems);
