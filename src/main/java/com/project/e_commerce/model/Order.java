@@ -28,10 +28,20 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties("orders")
     private User user;
 
     @OneToMany(mappedBy = "order",cascade = CascadeType.ALL,orphanRemoval = true)
     @JsonIgnoreProperties("order")
     private List<OrderItem> orderItems = new ArrayList<>();
 
+    public Double getTotalPrice(){
+        double total = 0.0;
+        if(orderItems != null){
+            for(OrderItem item : orderItems){
+                total += item.getPrice() * item.getQuantity();
+            }
+        }
+        return total;
+    }
 }
