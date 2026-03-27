@@ -2,7 +2,6 @@ package com.project.e_commerce.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,15 +15,20 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Products {
+public class OrderItem {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+    private Integer quantity;
     private Double price;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "category_id")
-    @JsonIgnoreProperties({"products","HebernateLazyInitializer","handler"})
-    private Category category;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    @JsonIgnoreProperties("orderItems")
+    private Order order;
+
+    @ManyToOne
+    @JoinColumn(name = "produt_id")
+    private Products products;
 }
