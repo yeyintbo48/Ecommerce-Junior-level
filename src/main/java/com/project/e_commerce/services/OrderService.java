@@ -2,10 +2,14 @@ package com.project.e_commerce.services;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.management.RuntimeErrorException;
+
 import org.springframework.stereotype.Service;
 import com.project.e_commerce.dtos.OrderItemRequest;
 import com.project.e_commerce.model.Order;
 import com.project.e_commerce.model.OrderItem;
+import com.project.e_commerce.model.OrderStatus;
 import com.project.e_commerce.model.Products;
 import com.project.e_commerce.model.User;
 import com.project.e_commerce.repositories.OrderRepository;
@@ -51,6 +55,12 @@ public class OrderService {
             orderItems.add(item);
         }
         order.setOrderItems(orderItems);
+        return orderRepository.save(order);
+    }
+
+    public Order updateOrderStatus(Long orderId,OrderStatus newStatus){
+        Order order = orderRepository.findById(orderId).orElseThrow(()->new RuntimeException("OrderId:" + orderId + "not found"));
+        order.setStauts(newStatus);
         return orderRepository.save(order);
     }
 }
