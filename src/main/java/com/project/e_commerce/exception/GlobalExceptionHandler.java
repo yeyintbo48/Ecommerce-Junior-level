@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error,HttpStatus.BAD_REQUEST);
     }
 
-    //this body will catch validation error withoud passing @valid
+    //this body will catch validation error without passing @valid
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex){
         String errorMessage = ex.getBindingResult().getFieldErrors().stream().map(error -> error.getDefaultMessage()).findFirst().orElse("Validation Error");
