@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.project.e_commerce.dtos.OrderItemRequest;
 import com.project.e_commerce.dtos.OrderRequest;
 import com.project.e_commerce.model.Order;
 import com.project.e_commerce.model.OrderStatus;

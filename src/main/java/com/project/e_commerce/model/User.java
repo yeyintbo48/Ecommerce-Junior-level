@@ -29,11 +29,12 @@ public class User implements UserDetails{
     private Long id;
     private String username;
     private String email;
+    private String password;
     
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
     @JsonIgnoreProperties("user")
     private List<Order> orders = new ArrayList<>();
 
@@ -69,6 +70,6 @@ public class User implements UserDetails{
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 }
