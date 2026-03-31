@@ -33,7 +33,7 @@ public class Order {
     @JsonIgnoreProperties("orders")
     private User user;
 
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
     @JsonIgnoreProperties("order")
     private List<OrderItem> orderItems = new ArrayList<>();
 

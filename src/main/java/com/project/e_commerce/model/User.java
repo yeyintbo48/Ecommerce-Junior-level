@@ -34,7 +34,7 @@ public class User implements UserDetails{
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     @JsonIgnoreProperties("user")
     private List<Order> orders = new ArrayList<>();
 

@@ -2,10 +2,13 @@ package com.project.e_commerce.controllers;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.project.e_commerce.model.Products;
 import com.project.e_commerce.repositories.ProductsRepository;
+import com.project.e_commerce.services.ProductService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +22,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class ProductsController {
     @Autowired
     private ProductsRepository productsRepository;
+
+    @Autowired
+    private ProductService productService;
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Products>> searchProducts(
+        @RequestParam(required = false) String keyword,
+        @RequestParam(required = false) String categoryName
+    ){
+        List<Products> products = productService.searchAndFilterProduct(keyword, categoryName);
+        return ResponseEntity.ok(products);
+    }
 
     @GetMapping
     public List<Products> getAllProducts(){
