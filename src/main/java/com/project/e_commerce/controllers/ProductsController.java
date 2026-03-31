@@ -2,6 +2,10 @@ package com.project.e_commerce.controllers;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,7 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
 @RestController
 @RequestMapping("/products")
 public class ProductsController {
@@ -27,12 +30,19 @@ public class ProductsController {
     private ProductService productService;
 
     @GetMapping("/search")
-    public ResponseEntity<List<Products>> searchProducts(
+    public ResponseEntity<Page<Products>> searchProducts(
         @RequestParam(required = false) String keyword,
-        @RequestParam(required = false) String categoryName
+        @RequestParam(required = false) String categoryName,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size,
+        @RequestParam(defaultValue = "id") String sortBy,
+        @RequestParam(defaultValue = "asc") String sortDir
     ){
-        List<Products> products = productService.searchAndFilterProduct(keyword, categoryName);
-        return ResponseEntity.ok(products);
+
+        Sort sort = sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<Products> productsPage = productService.searchAndFilterProduct(keyword, categoryName, pageable);
+        return ResponseEntity.ok(productsPage);
     }
 
     @GetMapping
@@ -42,7 +52,7 @@ public class ProductsController {
 
     @GetMapping("/{id}")
     public Products findById(@PathVariable Long id){
-        return productsRepository.findById(id).orElse(null);
+        return productsRepository.findById(id).orElseThrow(()->new RuntimeException("Products not found with id:" + id));
     }
 
     @PostMapping("add/products")

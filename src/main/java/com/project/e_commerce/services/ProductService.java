@@ -1,7 +1,8 @@
 package com.project.e_commerce.services;
 
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.project.e_commerce.model.Products;
 import com.project.e_commerce.repositories.ProductsRepository;
@@ -13,15 +14,15 @@ public class ProductService {
     @Autowired
     private ProductsRepository productsRepository;
 
-    public List<Products> searchAndFilterProduct(String keyword,String categoryName){
+    public Page<Products> searchAndFilterProduct(String keyword,String categoryName,Pageable pageable){
         if(keyword != null && categoryName != null){
-            return productsRepository.findBy_nameContainingIgnoreCaseAndCategory_name(keyword, categoryName);
+            return productsRepository.findByNameContainingIgnoreCaseAndCategory_Name(keyword, categoryName, pageable);
         }else if(keyword != null){
-            return productsRepository.findByNameContainingIgnoreCase(keyword);
+            return productsRepository.findByNameContainingIgnoreCase(keyword,pageable);
         }else if(categoryName != null){
-            return productsRepository.findByCategory_name(categoryName);
+            return productsRepository.findByCategory_Name(categoryName,pageable);
         }else{
-            return productsRepository.findAll();
+            return productsRepository.findAll(pageable);
         }
     }
 }
