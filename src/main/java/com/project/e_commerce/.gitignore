@@ -35,3 +35,6 @@ buildNumber.properties
 # --- Config & Secrets ---
 .env
 src/main/resources/application-local.properties
+
+# Uploaded images (Ecommerce မှာ products ပုံတွေတင်ရင် ဒီထဲရောက်တတ်တယ်)
+uploads/products/*
