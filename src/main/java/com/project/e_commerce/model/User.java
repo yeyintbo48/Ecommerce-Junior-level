@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -29,7 +31,12 @@ public class User implements UserDetails{
     private Long id;
     private String username;
     private String email;
+
+    @JsonIgnore
     private String password;
+
+    @JsonIgnore
+    private Collection<? extends GrantedAuthority> authorities;
     
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;

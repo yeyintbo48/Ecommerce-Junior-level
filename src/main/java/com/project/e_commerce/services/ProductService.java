@@ -1,6 +1,5 @@
 package com.project.e_commerce.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -11,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class ProductService {
-    @Autowired
     private ProductsRepository productsRepository;
 
     public Page<Products> searchAndFilterProduct(String keyword,String categoryName,Pageable pageable){
