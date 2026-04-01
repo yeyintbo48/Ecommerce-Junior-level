@@ -10,8 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import com.project.e_commerce.model.Products;
 import com.project.e_commerce.repositories.ProductsRepository;
+import com.project.e_commerce.services.FileService;
 import com.project.e_commerce.services.ProductService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +30,9 @@ public class ProductsController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private FileService fileService;
 
     @GetMapping("/search")
     public ResponseEntity<Page<Products>> searchProducts(
@@ -73,5 +78,18 @@ public class ProductsController {
     @DeleteMapping
     public void deleteProduct(@PathVariable Long id){
         productsRepository.deleteById(id);
+    }
+
+    @PostMapping("{id}/image")
+    public ResponseEntity<Products> uploadProductImage(@PathVariable Long id,@RequestParam("image") MultipartFile file){
+        try{
+                String fileName = fileService.saveImage(file);
+                Products product = productsRepository.findById(id).orElseThrow(()->new RuntimeException("Products not found with id:" + id));
+                product.setImageUrl(fileName);
+                Products updatedProduct = productsRepository.save(product);
+                return ResponseEntity.ok(updatedProduct);
+        }catch(Exception e){
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }
